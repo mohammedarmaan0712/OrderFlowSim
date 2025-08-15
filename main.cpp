@@ -1,72 +1,40 @@
 #include <iostream>
-#include <vector>
-#include <cstdlib>
+#include <map>
+#include "orderbook.hpp"
+#include "order.hpp"
 
 using namespace std;
 
+
+int main() {
+    map<const double, price_level> book = orderbookMap(); // Initialize the orderbook map
+    cout << "Bid  Price  Ask" << endl;
+    cout << "------------------" << endl;
+    for (auto& [price, level] : book) {
+        
+        cout << level.getBidQueue().size() << "  ";
+        cout << price << "  ";
+        cout << level.getAskQueue().size() << endl;
+    }
+}
+
+
+
 /*
-Do the following:
-1. Simulate a fake orderbook using rand function
-2. Simulate Market orders by taking rand() and
-3. Match market to orderbook (initially, the orderbook is static, will make it dynamic later)
-4. use different algorithms to match market orders to orderbook
-5. Print the orderbook and the matched orders together
-6. Initially, the orderbook will have only a small price range and then will simulate a larger, more realistic orderbook
+The objective is to create s mini market simulator with orderbooks, bid and ask orders, order placement mechanism and a matching en
+engine
+
+Step 1: Define what an order is and the types of orders there are. Use ENUM for different ordertypes:
+Here are a few that come to mind:
+Buy limit, sell limit, buy market, sell market, stop loss, take profit, trailing stop.
+Step 2: create a way for orders to be recorded at key specific levels
+This will involve creating a data structure of orderbooks that can hold a bid queue and ask queue
+Step 3: Create a way for price to move and orders to match
+This will involve modifying the order class to allow for price levels and matching logic
+Step 4: Implement a matching engine building on to step 3
+Step 5: User interface that shows the movement, orderbook, ability to place orders and modify them
 
 */
 
 
-class price_level{
-    private:
-        const double price;
-        int bid;
-        int ask;
-    public:
-        //constructor
-        price_level(double p, int b, int a)
-            : price(p), bid(b), ask(a)
-        {
-            if (price < 0 || bid < 0 || ask < 0) {
-                throw std::invalid_argument("Price, bid, and ask must be non-negative.");
-            }
-        }
-        //getters
-        double get_price() const { return price; }
-        int get_bid() const { return bid; }
-        int get_ask() const { return ask; }
-        //setters
-        void set_bid(int b) { 
-            if (b < 0) {
-                throw std::invalid_argument("Bid must be non-negative.");
-            }
-            bid = b; 
-        }
-        void set_ask(int a) { 
-            if (a < 0) {
-                throw std::invalid_argument("Ask must be non-negative.");
-            }
-            ask = a; 
-        }
-};
-
-vector<price_level> create_orderbook() {
-    vector<price_level> orderbook;
-    // Simulating a small price range orderbook
-    for (double price = 0; price <= 10.0; price += 1.0) {
-        orderbook.emplace_back(price, rand() % 10, rand() % 10);
-    }
-    return orderbook;
-}
-
-
-
-int main() {
-    vector<price_level> orderbook = create_orderbook();
-    for (const auto& level : orderbook) {
-
-        cout << "Bid: " << level.get_bid() 
-             << ", Price: " << level.get_price()  
-             << ", Ask: " << level.get_ask() << endl;
-    }
-    return 0;
-}
+//Define orderbook
