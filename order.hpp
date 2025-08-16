@@ -1,6 +1,9 @@
 #pragma once
-
 #include <iostream>
+#include <map>
+#include "orderbook.hpp"
+#include "order.hpp"
+
 
 using namespace std;
 
@@ -8,10 +11,7 @@ enum class OrderType {
     BuyLimit,
     SellLimit,
     BuyMarket,
-    SellMarket,
-    StopLoss,
-    TakeProfit,
-    TrailingStop
+    SellMarket
 };
 
 
@@ -45,7 +45,29 @@ class Order{
         OrderStatus getStatus() const;
     //setters
         void setStatus(OrderStatus newStatus);
-    //Key functions
-        void fillOrder();
-        void cancelOrder();
+    //Key functions to be implemented in derived classes
+        virtual void submitOrder(Order* order, map<const double, price_level>& book)=0;
+        virtual void fillOrder(Order* order, map<const double, price_level>& book)=0;
+        virtual void cancelOrder(Order* order, map<const double, price_level>& book)=0;
 };
+
+//different types of orders
+//Limit orders: Buy Limit, Sell Limit
+//Market orders: Buy Market, Sell Market
+//Stop orders: Stop Loss, Take Profit, Trailing Stop
+
+class LimitOrder : public Order {
+    public:
+        LimitOrder(OrderType type, double price, int quantity, int orderID, int accountID, OrderStatus status);
+        void submitOrder(Order* order, map<const double, price_level>& book) override;
+        void fillOrder(Order* order, map<const double, price_level>& book) override;
+        void cancelOrder(Order* order, map<const double, price_level>& book) override;
+};
+class MarketOrder : public Order {
+    public:
+        MarketOrder(OrderType type, double price, int quantity, int orderID, int accountID, OrderStatus status);
+        void submitOrder(Order* order, map<const double, price_level>& book) override;
+        void fillOrder(Order* order, map<const double, price_level>&book) override;
+        void cancelOrder(Order* order, map<const double, price_level>&book) override;
+};
+
