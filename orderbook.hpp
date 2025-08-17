@@ -19,6 +19,9 @@ class price_level{
     //getters
     queue<Order*>& getBidQueue();
     queue<Order*>& getAskQueue();
+    //setters (needed for setting up new queues when an order is removed)
+    void setBidQueue(queue<Order*> newBidQueue) { bidQueue = newBidQueue; }
+    void setAskQueue(queue<Order*> newAskQueue) { askQueue = newAskQueue; }
     //add orders to queues
     void addBidOrder(Order* order) ;
     void addAskOrder(Order* order) ;

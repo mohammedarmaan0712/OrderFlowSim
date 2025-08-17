@@ -116,10 +116,12 @@ void submitOrder(Order* order, map<const double, price_level>& book) {
     // Implementation for submitting a market order
     cout<< "Submitting market order is not implemented yet." << endl;
 }
+
 void MarketOrder::fillOrder(Order* order, map<const double, price_level>& book) {
     // Implementation for filling a market order
     cout<< "Filling market order is not implemented yet." << endl;
 }
+
 void MarketOrder::cancelOrder(Order* order, map<const double, price_level>& book) {
     // Implementation for cancelling a market order
     cout<< "Cancelling market order is not implemented yet." << endl;
